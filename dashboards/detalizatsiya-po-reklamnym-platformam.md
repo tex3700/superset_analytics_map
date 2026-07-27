@@ -82,7 +82,7 @@ Yandex Direct via Yandex Metrika API
 | `100` | [Усредненный ROI по всем площадкам adsarV2](../charts/usrednennyy-roi-po-vsem-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `AVG(roi_percent)` |
 | `101` | [Выручка с площадок за период adsarV2](../charts/vyruchka-s-ploshchadok-za-period-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(revenue)` |
 | `102` | [Рекламные расходы за период adsarV2](../charts/reklamnye-rashody-za-period-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(spend)` |
-| `103` | [Статистические данные по рекламным площадкам adsarV2](../charts/statisticheskie-dannye-po-reklamnym-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | Raw table; стоит добавить `attributed_orders` и `attribution_model` |
+| `103` | [Статистические данные по рекламным площадкам adsarV2](../charts/statisticheskie-dannye-po-reklamnym-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | Raw table с `attributed_orders` и `attribution_model` |
 | `104` | [Выручка по площадкам adsarV2](../charts/vyruchka-po-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(revenue)` по `platform` |
 
 Дополнительно:

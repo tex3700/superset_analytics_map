@@ -33,11 +33,6 @@ platform
 spend
 revenue
 roi_percent
-```
-
-Для сверки рекомендуется добавить:
-
-```text
 attributed_orders
 attribution_model
 ```
@@ -53,4 +48,3 @@ attribution_model
 ## Агрегация
 
 Нет. Chart выводит raw rows из virtual dataset.
-

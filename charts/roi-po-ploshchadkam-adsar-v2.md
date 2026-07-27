@@ -30,6 +30,7 @@ Mixed time series сравнивает расходы, выручку и ROI п�
 | primary metrics | `SUM(spend)`, `SUM(revenue)` |
 | secondary metric | SQL ROI через суммы |
 | primary temporal filter | `stat_date = Last month` |
+| secondary temporal filter | `stat_date = Last month` |
 | row limit | `10000` |
 
 SQL-метрика ROI:
@@ -40,8 +41,3 @@ CASE
   ELSE (SUM(revenue) - SUM(spend)) / SUM(spend) * 100
 END
 ```
-
-## Проверочное замечание
-
-В MCP-конфигурации у дополнительной ROI-серии был указан фильтр `No filter`, тогда как у основной серии стоит `Last month`. Нужно визуально проверить в Superset, что обе серии реально считаются по одному периоду.
-
