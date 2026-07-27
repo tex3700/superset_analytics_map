@@ -37,6 +37,8 @@ ya_metrica_users_goals_detailed
   -> orders_totals
 ```
 
+Статус после разбора customer objections: dataset оставлен для сверки со старой методикой. Для сравнения создан [ad_stats_and_roi_v2](./ad_stats_and_roi_v2.md), id `30`, где выручка дедуплицируется на уровне `shop_order_id`.
+
 ## Superset
 
 - Dataset ID: `18`
@@ -273,4 +275,3 @@ stat_date = DATE(order.date_added)
 - `spend` и `revenue` не должны быть отрицательными.
 - `roi_percent` должен быть `NULL`, если `spend = 0`.
 - Для площадок с выручкой, но без расходов, ROI в датасете будет `NULL`.
-

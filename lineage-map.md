@@ -88,6 +88,20 @@ Yandex Direct via Yandex Metrika API + Yandex Metrika users/goals + MID / CRM or
   -> Charts: Статистические данные по рекламным площадкам (id=49), ROI по площадкам (id=50), Выручка по площадкам (id=51), Рекламные расходы за период (id=52), Выручка с площадок за период (id=53), Усредненный ROI по всем площадкам (id=54), Статистика ROI Яндекс Директ (id=55)
   -> Dashboard: Детализация по рекламным платформам (id=13)
 
+Yandex Metrika API + MID / CRM orders
+  -> n8n workflow: Yandex metrica stats UTM and Users + PHP cron adb.php
+  -> ADB.adb.ya_metrica_users_goals_detailed + ADB.adb.orders + ADB.adb.order_products + ADB.adb.orders_totals
+  -> Superset virtual dataset: ya_metrica_users_goals_detailed_v2 (id=29)
+  -> Charts: Метрика по пользователям достигшим цели ymugdV2 (id=105), Доля трафика по источнику первого визита ymugdV2 (id=106), Выручка по источникам ymugdV2 (id=107)
+  -> Purpose: comparison / corrected order-level attribution
+
+Yandex Direct via Yandex Metrika API + Yandex Metrika users/goals + MID / CRM orders
+  -> n8n workflow: Advertisings stats + Yandex metrica stats UTM and Users + PHP cron adb.php
+  -> ADB.adb.ad_spend_daily + ADB.adb.ya_metrica_users_goals_detailed + ADB.adb.orders + ADB.adb.orders_totals
+  -> Superset virtual dataset: ad_stats_and_roi_v2 (id=30)
+  -> Charts: Статистика ROI Яндекс Директ adsarV2 (id=98), ROI по площадкам adsarV2 (id=99), Усредненный ROI по всем площадкам adsarV2 (id=100), Выручка с площадок за период adsarV2 (id=101), Рекламные расходы за период adsarV2 (id=102), Статистические данные по рекламным площадкам adsarV2 (id=103), Выручка по площадкам adsarV2 (id=104)
+  -> Purpose: comparison / ROI revenue overcount fix
+
 MID / CRM databases + Yandex Metrika users/goals
   -> PHP cron adb.php + n8n workflow: Yandex metrica stats UTM and Users
   -> ADB.adb.orders + ADB.adb.customers + ADB.adb.contact_events + ADB.adb.orders_totals + ADB.adb.ya_metrica_users_goals_detailed

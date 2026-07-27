@@ -34,6 +34,8 @@ Virtual dataset Superset, который объединяет детализац
 
 Заказы и товарные суммы подтягиваются из таблиц ADB, которые ежедневно пересобирает PHP cron `adb.php`.
 
+Статус после разбора customer objections: dataset оставлен как диагностический. Для order-level attribution без размножения заказов создан [ya_metrica_users_goals_detailed_v2](./ya_metrica_users_goals_detailed_v2.md), id `29`.
+
 ## Superset
 
 - Dataset ID: `15`

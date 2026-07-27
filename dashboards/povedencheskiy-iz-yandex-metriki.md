@@ -11,9 +11,13 @@ charts:
   - vyruchka_po_istochnikam
   - dolya_trafika_po_istochniku_pervogo_vizita
   - dolya_trafika_po_devaisam
+  - metrika_po_polzovatelyam_dostigshim_tseli_ymugd_v2
+  - dolya_trafika_po_istochniku_pervogo_vizita_ymugd_v2
+  - vyruchka_po_istochnikam_ymugd_v2
 datasets:
   - ya_metrica_daily_stats
   - ya_metrica_users_goals_detailed
+  - ya_metrica_users_goals_detailed_v2
   - order_products_ym
 ---
 
@@ -60,3 +64,13 @@ datasets:
 
 - Для `ya_metrica_daily_stats` пользователи в pie chart суммируются по дням и UTM-разрезам, поэтому это не обязательно уникальные пользователи за период.
 - Часть чартов дашборда строится на других датасетах, которые нужно документировать отдельно.
+
+## Comparison charts v2
+
+На dashboard `12` добавлены comparison charts на `ya_metrica_users_goals_detailed_v2`:
+
+| Chart ID | Чарт | Dataset | Комментарий |
+|---:|---|---|---|
+| `105` | [Метрика по пользователям достигшим цели ymugdV2](../charts/metrika-po-polzovatelyam-dostigshim-tseli-ymugd-v2.md) | `adb.ya_metrica_users_goals_detailed_v2` | Raw table по order-level attribution строкам |
+| `106` | [Доля трафика по источнику первого визита ymugdV2](../charts/dolya-trafika-po-istochniku-pervogo-vizita-ymugd-v2.md) | `adb.ya_metrica_users_goals_detailed_v2` | Не весь трафик Метрики, а распределение атрибутированных заказов по первому источнику |
+| `107` | [Выручка по источникам ymugdV2](../charts/vyruchka-po-istochnikam-ymugd-v2.md) | `adb.ya_metrica_users_goals_detailed_v2` | `SUM(total_value)` после дедупликации заказов |

@@ -8,6 +8,8 @@ datasets:
   - ya_metrica_users_goals_detailed
   - yandex_direct_spend_and_stats_daily
   - ad_stats_and_roi
+  - ya_metrica_users_goals_detailed_v2
+  - ad_stats_and_roi_v2
 charts:
   - vyruchka_po_istochnikam
   - yandex_direkt_obshchaya_statistika
@@ -20,6 +22,14 @@ charts:
   - vyruchka_s_ploshchadok_za_period
   - usrednennyy_roi_po_vsem_ploshchadkam
   - statistika_roi_yandex_direkt
+  - vyruchka_po_istochnikam_ymugd_v2
+  - statistika_roi_yandex_direkt_adsar_v2
+  - roi_po_ploshchadkam_adsar_v2
+  - usrednennyy_roi_po_vsem_ploshchadkam_adsar_v2
+  - vyruchka_s_ploshchadok_za_period_adsar_v2
+  - reklamnye_rashody_za_period_adsar_v2
+  - statisticheskie_dannye_po_reklamnym_ploshchadkam_adsar_v2
+  - vyruchka_po_ploshchadkam_adsar_v2
 ---
 
 ## Назначение
@@ -60,6 +70,21 @@ Yandex Direct via Yandex Metrika API
   -> Dashboard: 13
 ```
 
+## Comparison charts v2
+
+На dashboard `13` добавлены comparison charts на v2 datasets:
+
+| Chart ID | Чарт | Dataset | Комментарий |
+|---:|---|---|---|
+| `107` | [Выручка по источникам ymugdV2](../charts/vyruchka-po-istochnikam-ymugd-v2.md) | `adb.ya_metrica_users_goals_detailed_v2` | `SUM(total_value)` после дедупликации заказов |
+| `98` | [Статистика ROI Яндекс Директ adsarV2](../charts/statistika-roi-yandex-direkt-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `Yandex.Direct`, `MAX(spend/revenue/roi_percent)` |
+| `99` | [ROI по площадкам adsarV2](../charts/roi-po-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(spend)`, `SUM(revenue)`, ROI через суммы |
+| `100` | [Усредненный ROI по всем площадкам adsarV2](../charts/usrednennyy-roi-po-vsem-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `AVG(roi_percent)` |
+| `101` | [Выручка с площадок за период adsarV2](../charts/vyruchka-s-ploshchadok-za-period-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(revenue)` |
+| `102` | [Рекламные расходы за период adsarV2](../charts/reklamnye-rashody-za-period-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(spend)` |
+| `103` | [Статистические данные по рекламным площадкам adsarV2](../charts/statisticheskie-dannye-po-reklamnym-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | Raw table; стоит добавить `attributed_orders` и `attribution_model` |
+| `104` | [Выручка по площадкам adsarV2](../charts/vyruchka-po-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(revenue)` по `platform` |
+
 Дополнительно:
 
 ```text
@@ -70,4 +95,3 @@ MID / CRM databases
   -> Chart: Выручка по источникам
   -> Dashboard: 13
 ```
-
