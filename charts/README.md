@@ -1,5 +1,21 @@
 # Charts
 
+## Data quality charts
+
+| Chart ID | Chart | Dataset |
+|---:|---|---|
+| `108` | [Не агрегированные данные по заказам с рекламных площадок](./ne-agregirovannye-dannye-po-zakazam-s-reklamnyh-ploshchadok.md) | `ad_order_attribution_v2` |
+| `109` | [Динамика - Заказы без ym_uid 90d](./dinamika-zakazy-bez-ym-uid-90d.md) | `analytics_data_quality_daily` |
+| `110` | [Заказы без ym_uid 90d](./zakazy-bez-ym-uid-90d.md) | `analytics_data_quality_daily` |
+| `111` | [Всего заказов 90d](./vsego-zakazov-90d.md) | `analytics_data_quality_daily` |
+| `112` | [Не связанные с метрикой заказы 90d](./ne-svyazannye-s-metrikoy-zakazy-90d.md) | `analytics_data_quality_daily` |
+| `113` | [Коэффициент соответствия атрибуции](./koeffitsient-sootvetstviya-atributsii.md) | `analytics_data_quality_daily` |
+| `114` | [Динамика - Не связанные с метрикой заказы 90d](./dinamika-ne-svyazannye-s-metrikoy-zakazy-90d.md) | `analytics_data_quality_daily` |
+| `115` | [Атрибутированная выручка 90d](./atributirovannaya-vyruchka-90d.md) | `analytics_data_quality_daily` |
+| `116` | [Динамика качества](./dinamika-kachestva.md) | `analytics_data_quality_daily` |
+| `117` | [Доля атрибутированной выручки от общей суммы заказов](./dolya-atributirovannoy-vyruchki-ot-obshchey-summy-zakazov.md) | `analytics_data_quality_daily` |
+| `118` | [История проверок](./istoriya-proverok.md) | `analytics_data_quality_daily` |
+
 В этой папке описываем чарты Superset.
 
 Для каждого чарта нужно указать:

@@ -1,5 +1,12 @@
 # Datasets
 
+## Data quality / attribution datasets
+
+| Dataset | ID | Назначение |
+|---|---:|---|
+| [ad_order_attribution_v2](./ad_order_attribution_v2.md) | `31` | Order-level attribution dataset с `matched` / `unmatched` заказами |
+| [analytics_data_quality_daily](./analytics_data_quality_daily.md) | `32` | Physical dataset качества данных аналитики |
+
 В этой папке описываем датасеты Superset.
 
 Датасет является центральной сущностью документации. Через него связываются источники, таблицы ADB, чарты и дашборды.

@@ -1,5 +1,14 @@
 # Ingestion
 
+## Описанные процессы
+
+| Процесс | Тип | Назначение |
+|---|---|---|
+| [ADB cron PHP](./adb-cron-php.md) | PHP cron | Перенос и пересборка таблиц ADB из MID / CRM |
+| [Advertisings stats](./advertisings-stats.md) | n8n | Загрузка расходов и целей рекламных кампаний |
+| [Yandex metrica stats UTM and Users](./yandex-metrica-stats-utm-and-users.md) | n8n | Загрузка данных Яндекс.Метрики |
+| [Analytics data quality](./analytics-data-quality.md) | n8n | Ежедневное заполнение `adb.analytics_data_quality_daily` |
+
 В этой папке описываем процессы загрузки и обновления данных в ADB.
 
 Процесс загрузки отвечает на вопросы:
@@ -14,4 +23,3 @@
 Для нового процесса используйте шаблон:
 
 [../templates/ingestion-template.md](../templates/ingestion-template.md)
-

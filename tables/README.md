@@ -1,5 +1,11 @@
 # ADB Tables
 
+## Data quality tables
+
+| Таблица | Назначение |
+|---|---|
+| [analytics_data_quality_daily](./analytics_data_quality_daily.md) | Ежедневные результаты проверок качества аналитики |
+
 В этой папке описываем физические таблицы ADB, которые используются несколькими Superset-датасетами.
 
 Такие таблицы лучше документировать отдельно, чтобы:
@@ -15,4 +21,3 @@
 | [orders](orders.md) | Заказы магазина с привязкой к Яндекс.Метрике и CRM |
 | [order_products](order_products.md) | Товары в заказах |
 | [orders_totals](orders_totals.md) | Финансовые строки итогов заказа |
-

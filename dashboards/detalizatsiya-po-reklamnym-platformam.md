@@ -10,6 +10,7 @@ datasets:
   - ad_stats_and_roi
   - ya_metrica_users_goals_detailed_v2
   - ad_stats_and_roi_v2
+  - ad_order_attribution_v2
 charts:
   - vyruchka_po_istochnikam
   - yandex_direkt_obshchaya_statistika
@@ -23,6 +24,7 @@ charts:
   - usrednennyy_roi_po_vsem_ploshchadkam
   - statistika_roi_yandex_direkt
   - vyruchka_po_istochnikam_ymugd_v2
+  - ne_agregirovannye_dannye_po_zakazam_s_reklamnyh_ploshchadok
   - statistika_roi_yandex_direkt_adsar_v2
   - roi_po_ploshchadkam_adsar_v2
   - usrednennyy_roi_po_vsem_ploshchadkam_adsar_v2
@@ -77,6 +79,7 @@ Yandex Direct via Yandex Metrika API
 | Chart ID | Чарт | Dataset | Комментарий |
 |---:|---|---|---|
 | `107` | [Выручка по источникам ymugdV2](../charts/vyruchka-po-istochnikam-ymugd-v2.md) | `adb.ya_metrica_users_goals_detailed_v2` | `SUM(total_value)` после дедупликации заказов |
+| `108` | [Не агрегированные данные по заказам с рекламных площадок](../charts/ne-agregirovannye-dannye-po-zakazam-s-reklamnyh-ploshchadok.md) | `adb.ad_order_attribution_v2` | Raw order-level attribution |
 | `98` | [Статистика ROI Яндекс Директ adsarV2](../charts/statistika-roi-yandex-direkt-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `Yandex.Direct`, `MAX(spend/revenue/roi_percent)` |
 | `99` | [ROI по площадкам adsarV2](../charts/roi-po-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `SUM(spend)`, `SUM(revenue)`, ROI через суммы |
 | `100` | [Усредненный ROI по всем площадкам adsarV2](../charts/usrednennyy-roi-po-vsem-ploshchadkam-adsar-v2.md) | `adb.ad_stats_and_roi_v2` | `AVG(roi_percent)` |
