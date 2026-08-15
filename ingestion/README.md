@@ -8,6 +8,7 @@
 | [Advertisings stats](./advertisings-stats.md) | n8n | Загрузка расходов и целей рекламных кампаний |
 | [Yandex metrica stats UTM and Users](./yandex-metrica-stats-utm-and-users.md) | n8n | Загрузка данных Яндекс.Метрики |
 | [Analytics data quality](./analytics-data-quality.md) | n8n | Ежедневное заполнение `adb.analytics_data_quality_daily` |
+| [Payment measurement v2](./payment-measurement-v2.md) | PHP cron | Перенос payment outbox/reconciliation из MID в ADB |
 
 В этой папке описываем процессы загрузки и обновления данных в ADB.
 

@@ -56,8 +56,23 @@ Schedule Trigger
 | `orders_total_revenue_90d` | Общая сумма заказов |
 | `attributed_revenue_share_90d` | Доля атрибутированной выручки |
 
+## Payment v2 checks
+
+После подключения payment measurement v2 эта же процедура пишет проверки по ADB-зеркалам payment outbox/reconciliation:
+
+| check_name | Смысл |
+|---|---|
+| `payment_outbox_trusted_event_rows` | Trusted event rows и distinct orders; контроль production read-back `536 / 179` |
+| `payment_outbox_untrusted_event_rows` | Untrusted event rows и distinct orders; контроль production read-back `564 / 188` |
+| `payment_gross_paid_trusted_orders` | Trusted gross paid на grain `order_id + payment_id` |
+| `payment_gross_paid_untrusted_orders` | Untrusted gross paid, сохраняемый в общем финансовом факте |
+| `payment_missing_purchase_paid_orders` | Канонические `order_paid_v2` без sibling `purchase_paid` |
+| `payment_amount_mismatch_orders` | Расхождения суммы между `order_paid_v2` и sibling events |
+| `payment_currency_mismatch_orders` | Расхождения валюты между `order_paid_v2` и sibling events |
+| `payment_postfix_sent_missing_client_id` | Post-fix sent trusted events с пустым `client_id` |
+| `payment_postfix_new_client_id_reuse_clusters` | Post-fix новые reuse-кластеры ClientID |
+
 ## Используется
 
 - Superset physical dataset: [analytics_data_quality_daily](../datasets/analytics_data_quality_daily.md), id `32`
 - Dashboard: [Качество данных аналитики](../dashboards/kachestvo-dannyh-analitiki.md), id `16`
-

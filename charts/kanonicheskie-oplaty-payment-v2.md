@@ -1,0 +1,48 @@
+# Chart: Канонические оплаты payment v2
+
+---
+type: chart
+name: Канонические оплаты payment v2
+superset_chart_id: 121
+dataset: order_payments_v2
+dashboards:
+  - TODO
+---
+
+## Назначение
+
+Raw table chart для просмотра канонического финансового факта payment v2.
+
+Одна строка соответствует одной оплате на grain `order_id + payment_id`, созданной первым `operator_verified order_paid_v2`.
+
+## Superset
+
+- Chart name: `Канонические оплаты payment v2`
+- Chart ID: `121`
+- Visualization type: table
+- Dataset: [order_payments_v2](../datasets/order_payments_v2.md), id `35`
+- Dashboard: TODO
+
+## Используемые поля
+
+Чарт выводит все поля dataset [order_payments_v2](../datasets/order_payments_v2.md).
+
+## Агрегация в чарте
+
+Исходный grain датасета:
+
+```text
+1 строка = 1 order_id + payment_id
+```
+
+Grain после агрегации в чарте:
+
+```text
+не агрегируется
+```
+
+## Особенности интерпретации
+
+- `gross_paid_amount` является текущим финансовым фактом оплаты.
+- `net_paid` пока не заявляется, потому что нет отдельного refund/cancel контура.
+- `payment_attribution_trust = trusted` означает качество ClientID, но не доказывает связь с рекламной кампанией.

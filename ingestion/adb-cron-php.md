@@ -11,6 +11,8 @@ source:
 writes_to:
   - adb.orders
   - adb.orders_utm
+  - adb.mid_analytics_payment_event_outbox
+  - adb.mid_analytics_payment_reconciliation
   - adb.orders_totals
   - adb.order_products
   - adb.customers
@@ -38,7 +40,7 @@ PHP cron script обновляет часть таблиц ADB из внутре
 
 ## Техническая информация
 
-- Файл: `C:\Users\Dmitry\Desktop\FreeLance\RAWMID\Tasks\ApacheSuperset\BuP\adb.php`
+- Код: production PHP cron `adb.php` в CRM
 - Класс: `ControllerCronAdb`
 - URL запуска: `https://crm.madeindream.com/admin/index.php?route=cron/adb`
 - Расписание: ежедневно в 06:30
@@ -63,6 +65,8 @@ PHP cron script обновляет часть таблиц ADB из внутре
 ```text
 move_orders
 move_orders_utm
+move_mid_payment_event_outbox
+move_mid_payment_reconciliation
 move_orders_totals
 move_order_products
 move_mp_monitoring_prices
@@ -162,10 +166,52 @@ WHERE code = 'total'
 GROUP BY shop_order_id
 ```
 
+## Таблицы payment measurement v2
+
+### [adb.mid_analytics_payment_event_outbox](../tables/mid_analytics_payment_event_outbox.md)
+
+Функция: `move_mid_payment_event_outbox`
+
+Режим обновления:
+
+```text
+TRUNCATE -> batch INSERT
+```
+
+Источник:
+
+- MID table `analytics_payment_event_outbox`
+
+Назначение:
+
+- перенос `order_paid`, `order_paid_v2`, `purchase_paid`;
+- сохранение `order_id`, `payment_id`, `paid_at`, `amount`, `currency`;
+- сохранение `client_id`, `yclid`, UTM и `attribution_trust`;
+- контроль доставки через `status`, `last_http_code`, `sent_at`.
+
+### [adb.mid_analytics_payment_reconciliation](../tables/mid_analytics_payment_reconciliation.md)
+
+Функция: `move_mid_payment_reconciliation`
+
+Режим обновления:
+
+```text
+TRUNCATE -> batch INSERT
+```
+
+Источник:
+
+- MID table `analytics_payment_reconciliation`
+
+Назначение:
+
+- контроль read-back и доставки payment-событий;
+- флаги `purchase_seen`, `goal_readback_ok`, `classification`, `reconciled_status`;
+- сверка суммы/валюты с outbox на уровне payment-v2 datasets.
+
 ## Особенности
 
 - Перед основными операциями скрипт отключает `FOREIGN_KEY_CHECKS` и `UNIQUE_CHECKS`, после выполнения включает обратно.
 - Большая часть таблиц пересобирается полностью через `TRUNCATE`.
 - Этапы выполнения логируются в `adb.log` через `log_stage`.
 - Для `orders.ym_uid` значение извлекается из `_ym_uid` внутри `ym_cookie`.
-

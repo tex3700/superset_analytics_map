@@ -117,6 +117,22 @@ ADB quality checks
   -> Charts: 109, 110, 111, 112, 113, 114, 115, 116, 117, 118
   -> Dashboard: Качество данных аналитики (id=16)
 
+MID payment measurement v2
+  -> PHP cron: adb.php, daily 06:30
+  -> ADB.adb.mid_analytics_payment_event_outbox + ADB.adb.mid_analytics_payment_reconciliation
+  -> ADB views: payment_events_v2 + order_payments_v2 + payment_campaign_attribution_v2
+  -> Superset datasets: payment_events_v2 (id=34), order_payments_v2 (id=35), payment_campaign_attribution_v2 (id=36)
+  -> Charts: События payment outbox и сверка (id=120), Канонические оплаты payment v2 (id=121), Атрибуция оплат по рекламным кампаниям (id=122)
+  -> Purpose: exact gross paid fact by first operator_verified order_paid_v2; untrusted payments retained in finance but excluded from proven campaign CPA/ROAS/CAC
+
+MID payment measurement v2 + ADB quality checks
+  -> PHP cron: adb.php + n8n workflow: Analytics data quality
+  -> ADB.adb.mid_analytics_payment_event_outbox + ADB.adb.mid_analytics_payment_reconciliation
+  -> MySQL procedure: adb.refresh_analytics_data_quality_daily
+  -> ADB.adb.analytics_data_quality_daily
+  -> Superset dataset: analytics_data_quality_daily (id=32)
+  -> Purpose: trusted/untrusted read-back, missing purchase_paid, amount/currency mismatch, post-fix ClientID quality
+
 MID / CRM databases + Yandex Metrika users/goals
   -> PHP cron adb.php + n8n workflow: Yandex metrica stats UTM and Users
   -> ADB.adb.orders + ADB.adb.customers + ADB.adb.contact_events + ADB.adb.orders_totals + ADB.adb.ya_metrica_users_goals_detailed

@@ -5,6 +5,8 @@
 | Таблица | Назначение |
 |---|---|
 | [analytics_data_quality_daily](./analytics_data_quality_daily.md) | Ежедневные результаты проверок качества аналитики |
+| [mid_analytics_payment_event_outbox](./mid_analytics_payment_event_outbox.md) | ADB-зеркало payment outbox из MID/madeindream |
+| [mid_analytics_payment_reconciliation](./mid_analytics_payment_reconciliation.md) | ADB-зеркало payment reconciliation из MID/madeindream |
 
 В этой папке описываем физические таблицы ADB, которые используются несколькими Superset-датасетами.
 

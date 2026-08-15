@@ -6,6 +6,9 @@
 |---|---:|---|
 | [ad_order_attribution_v2](./ad_order_attribution_v2.md) | `31` | Order-level attribution dataset с `matched` / `unmatched` заказами |
 | [analytics_data_quality_daily](./analytics_data_quality_daily.md) | `32` | Physical dataset качества данных аналитики |
+| [payment_events_v2](./payment_events_v2.md) | `34` | Payment-v2 event-level diagnostics |
+| [order_payments_v2](./order_payments_v2.md) | `35` | Канонический gross paid факт на grain `order_id + payment_id` |
+| [payment_campaign_attribution_v2](./payment_campaign_attribution_v2.md) | `36` | Payment-level campaign attribution с `campaign_attribution_quality` |
 
 В этой папке описываем датасеты Superset.
 

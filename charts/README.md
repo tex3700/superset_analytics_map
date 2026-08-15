@@ -16,6 +16,14 @@
 | `117` | [Доля атрибутированной выручки от общей суммы заказов](./dolya-atributirovannoy-vyruchki-ot-obshchey-summy-zakazov.md) | `analytics_data_quality_daily` |
 | `118` | [История проверок](./istoriya-proverok.md) | `analytics_data_quality_daily` |
 
+## Payment v2 raw charts
+
+| Chart ID | Chart | Dataset |
+|---:|---|---|
+| `120` | [События payment outbox и сверка](./sobytiya-payment-outbox-i-sverka.md) | `payment_events_v2` |
+| `121` | [Канонические оплаты payment v2](./kanonicheskie-oplaty-payment-v2.md) | `order_payments_v2` |
+| `122` | [Атрибуция оплат по рекламным кампаниям](./atributsiya-oplat-po-reklamnym-kampaniyam.md) | `payment_campaign_attribution_v2` |
+
 В этой папке описываем чарты Superset.
 
 Для каждого чарта нужно указать:
