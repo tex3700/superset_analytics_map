@@ -54,6 +54,18 @@ gross_paid_amount
 
 Пока нет отдельного источника refund/cancel-событий и сумм, dataset не заявляет `net_paid`.
 
+## Валюты
+
+Денежные суммы нельзя складывать между разными валютами без документированного FX-курса.
+
+В текущем payment-v2 слое суммы показываются в исходной валюте оплаты:
+
+```text
+RUB / KZT / BYN
+```
+
+Все финансовые read-back запросы и charts должны группировать денежные показатели по `currency`, либо использовать отдельную документированную FX-конвертацию. На 2026-08-16 FX-конвертация не внедрена.
+
 ## Поля и русские labels
 
 | Поле | Label в Superset | Источник / формула | Описание |
@@ -114,6 +126,7 @@ gross_paid_amount
 ```sql
 SELECT
   payment_attribution_trust,
+  currency,
   COUNT(*) AS payment_rows,
   COUNT(DISTINCT order_id) AS orders,
   ROUND(SUM(gross_paid_amount), 2) AS gross_paid_amount,
@@ -121,13 +134,24 @@ SELECT
   SUM(amount_mismatch_flag) AS amount_mismatch_orders,
   SUM(currency_mismatch_flag) AS currency_mismatch_orders
 FROM adb.order_payments_v2
-GROUP BY payment_attribution_trust
-ORDER BY payment_attribution_trust;
+GROUP BY payment_attribution_trust, currency
+ORDER BY payment_attribution_trust, currency;
 ```
 
-Результат read-back на 2026-08-14:
+Результат независимой production-приемки на 2026-08-16:
 
-| `payment_attribution_trust` | `payment_rows` | `orders` | `gross_paid_amount` | `missing_purchase_paid_orders` | `amount_mismatch_orders` | `currency_mismatch_orders` |
-|---|---:|---:|---:|---:|---:|---:|
-| `trusted` | 199 | 199 | 3000486.90 | 1 | 0 | 0 |
-| `untrusted` | 188 | 188 | 22317241.43 | 0 | 0 | 0 |
+| `payment_attribution_trust` | `currency` | `payment_rows / orders` | `gross_paid_amount` |
+|---|---|---:|---:|
+| `trusted` | `RUB` | 216 total trusted payments across currencies | 2797071.26 |
+| `trusted` | `KZT` | included in 216 trusted payments | 625000.00 |
+| `trusted` | `BYN` | included in 216 trusted payments | 2300.63 |
+| `untrusted` | `RUB` | 188 total untrusted payments across currencies | 10023957.00 |
+| `untrusted` | `KZT` | included in 188 untrusted payments | 12293284.43 |
+
+Итоги качества приемки:
+
+- `trusted`: 216 оплат;
+- `untrusted`: 188 оплат;
+- `missing_purchase_paid` у trusted: 1;
+- `amount_mismatch`: 0;
+- `currency_mismatch`: 0.

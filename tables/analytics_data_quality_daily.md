@@ -57,8 +57,10 @@ CALL adb.refresh_analytics_data_quality_daily();
 |---|---|
 | `payment_outbox_trusted_event_rows` | Количество trusted event rows и orders в `mid_analytics_payment_event_outbox` |
 | `payment_outbox_untrusted_event_rows` | Количество untrusted event rows и orders; канонический target `564 / 188` |
-| `payment_gross_paid_trusted_orders` | Trusted gross paid на каноническом grain `order_id + payment_id` |
-| `payment_gross_paid_untrusted_orders` | Untrusted gross paid, сохраняемый в финансовом факте |
+| `payment_gross_paid_trusted_orders` | Количество trusted оплат на каноническом grain `order_id + payment_id` |
+| `payment_gross_paid_untrusted_orders` | Количество untrusted оплат, сохраняемых в финансовом факте |
+| `payment_gross_paid_trusted_rub/kzt/byn` | Trusted gross paid отдельно по валютам |
+| `payment_gross_paid_untrusted_rub/kzt/byn` | Untrusted gross paid отдельно по валютам |
 | `payment_missing_purchase_paid_orders` | Канонические оплаты без sibling `purchase_paid` |
 | `payment_amount_mismatch_orders` | Расхождение суммы между `order_paid_v2` и sibling events |
 | `payment_currency_mismatch_orders` | Расхождение валюты между `order_paid_v2` и sibling events |

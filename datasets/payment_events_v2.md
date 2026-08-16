@@ -106,15 +106,18 @@ Dataset показывает все payment measurement events как событ
 SELECT
   attribution_trust,
   event_name,
+  currency,
   COUNT(*) AS event_rows,
   COUNT(DISTINCT order_id) AS orders,
   ROUND(SUM(amount), 2) AS amount_sum
 FROM adb.payment_events_v2
-GROUP BY attribution_trust, event_name
-ORDER BY attribution_trust, event_name;
+GROUP BY attribution_trust, event_name, currency
+ORDER BY attribution_trust, event_name, currency;
 ```
 
-Результат read-back на 2026-08-14:
+Примечание: денежные суммы группируются по `currency`, потому что разные валюты нельзя складывать в один total без FX-курса.
+
+Предыдущий read-back на 2026-08-14 до валютного уточнения:
 
 | `attribution_trust` | `event_name` | `event_rows` | `orders` | `amount_sum` |
 |---|---|---:|---:|---:|

@@ -47,6 +47,20 @@ Dataset показывает payment-level оплату вместе с реше
 
 Источник SQL для Superset: ADB view `adb.payment_campaign_attribution_v2`.
 
+## Валюты и campaign KPI
+
+Денежные суммы нельзя складывать между разными валютами без документированного FX-курса.
+
+Campaign CPA/ROAS/CAC требует отдельного join с расходом Direct на одинаковом:
+
+- периоде;
+- валюте;
+- VAT-базе;
+- attribution model;
+- зрелом окне данных.
+
+На 2026-08-16 этот spend join еще не входит в `payment_campaign_attribution_v2`; dataset принят для gross paid и классификации attribution, но не является готовым CPA/ROAS dataset.
+
 ## Campaign attribution quality
 
 Минимальные значения:
@@ -95,6 +109,7 @@ Dataset наследует все поля [order_payments_v2](./order_payments_
 ```sql
 SELECT
   campaign_attribution_quality,
+  currency,
   COUNT(*) AS payment_rows,
   COUNT(DISTINCT order_id) AS orders,
   ROUND(SUM(gross_paid_amount), 2) AS gross_paid_amount,
@@ -102,17 +117,22 @@ SELECT
   ROUND(SUM(COALESCE(untrusted_gross_paid_amount, 0)), 2) AS untrusted_gross_paid_amount,
   ROUND(SUM(COALESCE(trusted_unattributed_gross_paid_amount, 0)), 2) AS trusted_unattributed_gross_paid_amount
 FROM adb.payment_campaign_attribution_v2
-GROUP BY campaign_attribution_quality
-ORDER BY campaign_attribution_quality;
+GROUP BY campaign_attribution_quality, currency
+ORDER BY campaign_attribution_quality, currency;
 ```
 
-Read-back после исправления exact/proven campaign attribution на 2026-08-14:
+Read-back независимой production-приемки на 2026-08-16:
 
-| `campaign_attribution_quality` | `payment_rows` | `orders` | `gross_paid_amount` | `proven_campaign_gross_paid_amount` | `untrusted_gross_paid_amount` | `trusted_unattributed_gross_paid_amount` |
-|---|---:|---:|---:|---:|---:|---:|
-| `exact_campaign_id_yclid` | 22 | 22 | 315713.00 | 315713.00 | 0.00 | 0.00 |
-| `unattributed` | 169 | 169 | 2585717.90 | 0.00 | 0.00 | 2585717.90 |
-| `untrusted_client_id` | 188 | 188 | 22317241.43 | 0.00 | 22317241.43 | 0.00 |
-| `utm_fallback` | 8 | 8 | 99056.00 | 0.00 | 0.00 | 99056.00 |
+| `campaign_attribution_quality` | `currency` | `payment_rows / orders` | `gross_paid_amount` | `proven_campaign_gross_paid_amount` |
+|---|---|---:|---:|---:|
+| `exact_campaign_id_yclid` | `RUB` | 23 / 23 | 329475.00 | 329475.00 |
+| `utm_fallback` | `RUB` | 8 / 8 | 99056.00 | 0.00 |
+| `untrusted_client_id` | `RUB` | part of 188 untrusted payments | 10023957.00 | 0.00 |
+| `untrusted_client_id` | `KZT` | part of 188 untrusted payments | 12293284.43 | 0.00 |
 
-Вывод: proven campaign gross paid есть только в `exact_campaign_id_yclid`. `unattributed`, `utm_fallback` и `untrusted_client_id` не входят в доказанные campaign CPA/ROAS/CAC.
+Дополнительные итоги приемки:
+
+- нарушений `untrusted -> proven`: 0;
+- `utm_fallback`: 8 оплат / 99056.00 RUB, не proven;
+- proven campaign gross paid есть только в `exact_campaign_id_yclid`;
+- `unattributed`, `utm_fallback` и `untrusted_client_id` не входят в доказанные campaign CPA/ROAS/CAC.

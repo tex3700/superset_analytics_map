@@ -64,8 +64,10 @@ Schedule Trigger
 |---|---|
 | `payment_outbox_trusted_event_rows` | Trusted event rows и distinct orders; контроль production read-back `536 / 179` |
 | `payment_outbox_untrusted_event_rows` | Untrusted event rows и distinct orders; контроль production read-back `564 / 188` |
-| `payment_gross_paid_trusted_orders` | Trusted gross paid на grain `order_id + payment_id` |
-| `payment_gross_paid_untrusted_orders` | Untrusted gross paid, сохраняемый в общем финансовом факте |
+| `payment_gross_paid_trusted_orders` | Количество trusted оплат на grain `order_id + payment_id` |
+| `payment_gross_paid_untrusted_orders` | Количество untrusted оплат, сохраняемых в общем финансовом факте |
+| `payment_gross_paid_trusted_rub/kzt/byn` | Trusted gross paid отдельно по валютам |
+| `payment_gross_paid_untrusted_rub/kzt/byn` | Untrusted gross paid отдельно по валютам |
 | `payment_missing_purchase_paid_orders` | Канонические `order_paid_v2` без sibling `purchase_paid` |
 | `payment_amount_mismatch_orders` | Расхождения суммы между `order_paid_v2` и sibling events |
 | `payment_currency_mismatch_orders` | Расхождения валюты между `order_paid_v2` и sibling events |

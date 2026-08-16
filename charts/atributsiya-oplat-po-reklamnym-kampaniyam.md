@@ -44,5 +44,6 @@ Grain после агрегации в чарте:
 ## Особенности интерпретации
 
 - В доказанные campaign KPI входит только `campaign_attribution_quality = exact_campaign_id_yclid`.
+- Денежные суммы нужно смотреть в разрезе `currency`; RUB/KZT/BYN нельзя складывать в один total без FX-курса.
 - `untrusted_client_id` сохраняется в общем финансовом факте, но не распределяется по кампаниям.
 - `utm_fallback` и `unattributed` показываются отдельно и не считаются доказанной campaign attribution.
