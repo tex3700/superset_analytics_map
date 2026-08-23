@@ -65,7 +65,7 @@ amount_quality
 
 Для `amount_quality = unknown` и `amount_quality = base_currency` полученная сумма не считается доказанной revenue и должна показываться отдельным bucket.
 
-Пока нет отдельного источника refund/cancel-событий и сумм, dataset не заявляет `net_paid`.
+Пока refund/cancel events не зеркалированы в ADB и не построен отдельный refund/net слой, dataset не заявляет `net_paid`.
 
 ## Валюты
 

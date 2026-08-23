@@ -122,7 +122,7 @@ Dataset наследует все поля [order_payments_v2](./order_payments_
 - `amount_quality IN ('unknown','base_currency')` показывается отдельно через `proven_campaign_unverified_order_amount`.
 - Для CampaignId `114341332` нельзя считать CPA/ROAS без подключения owning Direct account/spend.
 - Для future CPA/ROAS использовать `roas_eligible_verified_received_amount`, а не все `proven_campaign_verified_received_amount`.
-- До появления refund/cancel источника в dataset нет `net_paid`.
+- До появления ADB refund/net слоя в dataset нет `net_paid`.
 
 ## Read-back SQL
 

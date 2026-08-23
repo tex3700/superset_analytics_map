@@ -134,7 +134,7 @@ CPA/ROAS требует отдельного join с расходом Direct н�
 
 ## Чистое окно 2026-08-13..2026-08-19
 
-Независимый read-back заказчика:
+Независимый read-back:
 
 - backend sent `order_paid_v2`: 57;
 - raw Logs Метрики goal `589533122`: 57, sampling `0`;
@@ -163,6 +163,26 @@ Direct spend handoff для 2026-08-13..2026-08-19, IncludeVAT=YES, RUB:
 | `710031185` | 3231.81 |
 
 CampaignId `114341332` не наблюдается в подключенных Direct-аккаунтах; CPA/ROAS для него не считать без owning account/spend.
+
+## Production-приемка amount contract 2026-08-23
+
+Независимый read-back подтвердил:
+
+- `adb.mid_analytics_payment_event_outbox` содержит `amount_received` и `amount_quality`;
+- Superset datasets `34`, `35`, `36` обновлены;
+- grain `order_id + payment_id` сохранен: за 2026-08-13..2026-08-19 получено 100 строк и 100 уникальных ключей;
+- `sent=57`, `failed=43`;
+- sent-разбивка совпала с контрольной: 34 `exact RUB`, 1 `partial RUB`, 20 `unknown RUB`, 2 `base_currency BYN`;
+- mismatch `verified_received_amount` для `exact/partial`: 0;
+- `unknown/base_currency` не попадают в доказанную revenue;
+- campaign `114341332` имеет `direct_spend_missing_flag=1` и `is_campaign_roas_eligible=0`;
+- по campaign `709990033` оплата с недоказанной суммой корректно исключена из monetary ROAS.
+
+Вердикт: payment-v2 amount contract принят и закрыт.
+
+Текущий показатель слоя: `verified gross received revenue`, не `net paid`.
+
+Открытый P1: refund/net. Backend refund/cancel source принят на production, но в ADB пока нет refund/cancel/net-paid tables/views. Следующий шаг Superset/ADB: зеркалировать refund events в ADB на grain `order_id + payment_id + refund_id` и построить валютно-раздельные gross/refund/net витрины.
 
 ## Quality checks
 
