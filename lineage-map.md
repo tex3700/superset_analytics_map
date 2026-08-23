@@ -123,7 +123,7 @@ MID payment measurement v2
   -> ADB views: payment_events_v2 + order_payments_v2 + payment_campaign_attribution_v2
   -> Superset datasets: payment_events_v2 (id=34), order_payments_v2 (id=35), payment_campaign_attribution_v2 (id=36)
   -> Charts: События payment outbox и сверка (id=120), Канонические оплаты payment v2 (id=121), Атрибуция оплат по рекламным кампаниям (id=122)
-  -> Purpose: exact gross paid fact by first operator_verified order_paid_v2; untrusted payments retained in finance but excluded from proven campaign CPA/ROAS/CAC
+  -> Purpose: payment fact by first operator_verified order_paid_v2; order_amount and verified_received_amount are separated; proven campaign revenue uses amount_received only for exact/partial amount_quality; untrusted/unknown/base_currency retained as separate buckets
 
 MID payment measurement v2 + ADB quality checks
   -> PHP cron: adb.php + n8n workflow: Analytics data quality
@@ -131,7 +131,7 @@ MID payment measurement v2 + ADB quality checks
   -> MySQL procedure: adb.refresh_analytics_data_quality_daily
   -> ADB.adb.analytics_data_quality_daily
   -> Superset dataset: analytics_data_quality_daily (id=32)
-  -> Purpose: trusted/untrusted read-back, missing purchase_paid, amount/currency mismatch, post-fix ClientID quality
+  -> Purpose: trusted/untrusted read-back, missing purchase_paid, amount/currency mismatch, amount_quality buckets, currency-safe order/received amounts, post-fix ClientID quality
 
 MID / CRM databases + Yandex Metrika users/goals
   -> PHP cron adb.php + n8n workflow: Yandex metrica stats UTM and Users

@@ -43,7 +43,9 @@ Grain после агрегации в чарте:
 
 ## Особенности интерпретации
 
-- `gross_paid_amount` является текущим финансовым фактом оплаты.
+- `order_amount` / `gross_paid_amount` показывает сумму заказа/события.
+- `verified_received_amount` показывает фактически полученную сумму только для `amount_quality IN ('exact','partial')`.
+- `amount_quality IN ('unknown','base_currency')` показывать отдельно и не использовать как доказанную received revenue.
 - Денежные суммы нужно смотреть в разрезе `currency`; RUB/KZT/BYN нельзя складывать в один total без FX-курса.
 - `net_paid` пока не заявляется, потому что нет отдельного refund/cancel контура.
 - `payment_attribution_trust = trusted` означает качество ClientID, но не доказывает связь с рекламной кампанией.

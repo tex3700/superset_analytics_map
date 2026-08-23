@@ -37,7 +37,9 @@ Dataset показывает один канонический финансов�
 Он отвечает на вопросы:
 
 - сколько уникальных оплат подтверждено оператором;
-- какая gross paid сумма по оплатам;
+- какая сумма заказа указана в outbox;
+- какая сумма фактически подтверждена как полученная;
+- какое качество суммы (`exact`, `partial`, `unknown`, `base_currency`);
 - какие оплаты trusted/untrusted по ClientID;
 - у каких оплат нет sibling `purchase_paid`;
 - есть ли расхождения суммы/валюты между `order_paid_v2` и sibling events.
@@ -46,11 +48,22 @@ Dataset показывает один канонический финансов�
 
 ## Финансовая семантика
 
-Текущий показатель:
+Текущие показатели после нового amount contract:
 
 ```text
-gross_paid_amount
+order_amount
+verified_received_amount
+amount_quality
 ```
+
+`order_amount` / legacy `gross_paid_amount` берется из `outbox.amount` и означает сумму заказа/события. Это поле нельзя молча считать фактически полученными деньгами, если `amount_quality` не подтверждает сумму.
+
+`verified_received_amount` берется из `outbox.amount_received` только для:
+
+- `amount_quality = exact`;
+- `amount_quality = partial`.
+
+Для `amount_quality = unknown` и `amount_quality = base_currency` полученная сумма не считается доказанной revenue и должна показываться отдельным bucket.
 
 Пока нет отдельного источника refund/cancel-событий и сумм, dataset не заявляет `net_paid`.
 
@@ -75,7 +88,12 @@ RUB / KZT / BYN
 | `canonical_event_id` | ID канонического события | canonical `order_paid_v2.event_id` | Событие, создавшее финансовый факт |
 | `paid_at` | Время оплаты | canonical `order_paid_v2.paid_at` | Время подтверждения оплаты |
 | `paid_date` | Дата оплаты | `DATE(paid_at)` | Дата оплаты |
-| `gross_paid_amount` | Gross paid сумма | canonical `order_paid_v2.amount` | Каноническая сумма оплаты до refund/cancel |
+| `order_amount` | Сумма заказа | canonical `order_paid_v2.amount` | Сумма заказа/события по backend contract |
+| `gross_paid_amount` | Legacy gross/order amount | canonical `order_paid_v2.amount` | Совместимость со старыми chart-полями; не использовать как доказанную received revenue без `amount_quality` |
+| `amount_received` | Полученная сумма | canonical `order_paid_v2.amount_received` | Фактически полученная сумма из backend |
+| `amount_quality` | Качество суммы | canonical `order_paid_v2.amount_quality` | `exact`, `partial`, `unknown`, `base_currency` |
+| `verified_received_amount` | Подтвержденная полученная сумма | `amount_received`, если `amount_quality IN ('exact','partial')` | Денежное поле для доказанной revenue |
+| `has_verified_received_amount` | Есть подтвержденная сумма | `amount_quality IN ('exact','partial')` | Флаг возможности использовать `verified_received_amount` |
 | `currency` | Валюта | canonical `order_paid_v2.currency` | Валюта оплаты |
 | `client_id` | ClientID Метрики | canonical `order_paid_v2.client_id` | ClientID оплаты |
 | `yclid` | YCLID | canonical `order_paid_v2.yclid` | Click ID Яндекс.Директа |
@@ -118,6 +136,8 @@ RUB / KZT / BYN
 ## Правила использования
 
 - В общую gross paid выручку входят и `trusted`, и `untrusted`.
+- Для доказанной денежной revenue использовать `verified_received_amount`, а не `gross_paid_amount`.
+- `amount_quality IN ('unknown','base_currency')` показывать отдельно и не включать в proven revenue/ROAS.
 - В доказанные campaign CPA/ROAS/CAC нельзя включать `payment_attribution_trust = untrusted`.
 - `payment_attribution_trust = trusted` не означает доказанную кампанию; для этого нужен [payment_campaign_attribution_v2](./payment_campaign_attribution_v2.md) и `campaign_attribution_quality`.
 
@@ -129,14 +149,27 @@ SELECT
   currency,
   COUNT(*) AS payment_rows,
   COUNT(DISTINCT order_id) AS orders,
+  amount_quality,
   ROUND(SUM(gross_paid_amount), 2) AS gross_paid_amount,
+  ROUND(SUM(order_amount), 2) AS order_amount,
+  ROUND(SUM(COALESCE(verified_received_amount, 0)), 2) AS verified_received_amount,
   SUM(missing_purchase_paid_flag) AS missing_purchase_paid_orders,
   SUM(amount_mismatch_flag) AS amount_mismatch_orders,
   SUM(currency_mismatch_flag) AS currency_mismatch_orders
 FROM adb.order_payments_v2
-GROUP BY payment_attribution_trust, currency
-ORDER BY payment_attribution_trust, currency;
+GROUP BY payment_attribution_trust, currency, amount_quality
+ORDER BY payment_attribution_trust, currency, amount_quality;
 ```
+
+Read-back чистого окна 2026-08-13..2026-08-19, который должен совпасть после обновления ADB-зеркала и views:
+
+| `amount_quality` | `currency` | rows | `order_amount` | `verified_received_amount` |
+|---|---|---:|---:|---:|
+| `exact` | `RUB` | 34 | 386634.15 | 386634.00 |
+| `partial` | `RUB` | 1 | 44199.00 | 41105.07 |
+| `unknown` | `RUB` | 20 | 270043.00 | 0.00 |
+| `base_currency` | `BYN` | 2 | 1383.99 | 0.00 |
+| `exact` + failed/no_client_id | `KZT` | 35 | 4143300.00 | 0.00 |
 
 Результат независимой production-приемки на 2026-08-16:
 

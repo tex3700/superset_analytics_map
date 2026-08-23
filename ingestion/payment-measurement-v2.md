@@ -59,6 +59,25 @@ TRUNCATE -> batch INSERT
 - `attribution_trust` читается из outbox и не пересчитывается в Superset.
 - `untrusted` оплаты остаются в gross paid, но исключаются из доказанных campaign CPA/ROAS/CAC.
 
+## Amount contract с 2026-08-21
+
+Backend расширил `analytics_payment_event_outbox` полями:
+
+| Поле | Смысл |
+|---|---|
+| `amount` | Сумма заказа/события; в Superset отображается как `order_amount` и legacy `gross_paid_amount` |
+| `amount_received` | Фактически полученная сумма, если backend смог ее подтвердить |
+| `amount_quality` | Качество суммы: `exact`, `partial`, `unknown`, `base_currency` |
+
+Правило для доказанной денежной revenue:
+
+```text
+verified_received_amount = amount_received
+только если amount_quality IN ('exact', 'partial')
+```
+
+`unknown` и `base_currency` показываются отдельно и не входят в proven revenue/ROAS.
+
 ## Контрольные production read-back итоги
 
 Канонический read-back после ClientID fix на момент первичной проверки:
@@ -113,6 +132,38 @@ Currency breakdown на момент приемки:
 
 CPA/ROAS требует отдельного join с расходом Direct на одинаковом периоде, валюте, VAT-базе и зрелом окне данных.
 
+## Чистое окно 2026-08-13..2026-08-19
+
+Независимый read-back заказчика:
+
+- backend sent `order_paid_v2`: 57;
+- raw Logs Метрики goal `589533122`: 57, sampling `0`;
+- суммы совпали: `700876.15 RUB` и `1383.99 BYN`;
+- дублей: 0;
+- sent с missing ClientID source: 0;
+- reuse-кластеров `>8`: 0;
+- failed/no_client_id: 43 оплаты.
+
+Breakdown нового amount contract:
+
+| `amount_quality` | `currency` | rows | `order_amount` | `verified_received_amount` |
+|---|---|---:|---:|---:|
+| `exact` | `RUB` | 34 | 386634.15 | 386634.00 |
+| `partial` | `RUB` | 1 | 44199.00 | 41105.07 |
+| `unknown` | `RUB` | 20 | 270043.00 | не доказано |
+| `base_currency` | `BYN` | 2 | 1383.99 | не сравнимо |
+| `exact` + failed/no_client_id | `KZT` | 35 | 4143300.00 | не входит в sent clean window |
+
+Direct spend handoff для 2026-08-13..2026-08-19, IncludeVAT=YES, RUB:
+
+| CampaignId | Cost RUB |
+|---|---:|
+| `709990033` | 3472.29 |
+| `709998427` | 3465.00 |
+| `710031185` | 3231.81 |
+
+CampaignId `114341332` не наблюдается в подключенных Direct-аккаунтах; CPA/ROAS для него не считать без owning account/spend.
+
 ## Quality checks
 
 Добавлены в `adb.refresh_analytics_data_quality_daily`:
@@ -127,6 +178,9 @@ CPA/ROAS требует отдельного join с расходом Direct н�
 - `payment_gross_paid_untrusted_rub`
 - `payment_gross_paid_untrusted_kzt`
 - `payment_gross_paid_untrusted_byn`
+- `payment_amount_quality_<quality>_orders`
+- `payment_verified_received_<quality>_<currency>`
+- `payment_order_amount_<quality>_<currency>`
 - `payment_missing_purchase_paid_orders`
 - `payment_amount_mismatch_orders`
 - `payment_currency_mismatch_orders`

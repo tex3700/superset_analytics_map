@@ -51,7 +51,9 @@ purchase_paid
 | `order_id` | ID заказа MID |
 | `payment_id` | ID платежа; сейчас встречается формат `operator_verified:<order_id>` |
 | `paid_at` | Время подтверждения оплаты |
-| `amount` | Сумма события |
+| `amount` | Сумма заказа/события; не всегда фактически полученная сумма |
+| `amount_received` | Фактически полученная сумма, если backend смог ее подтвердить |
+| `amount_quality` | Качество суммы: `exact`, `partial`, `unknown`, `base_currency` |
 | `currency` | Валюта |
 | `client_id` | ClientID Яндекс.Метрики, если доступен |
 | `yclid` | Click ID Яндекс.Директа, если доступен |
@@ -76,3 +78,5 @@ purchase_paid
 - `trusted` не означает доказанную связь с рекламной кампанией.
 - `attribution_trust = untrusted` не удаляется из финансового факта, но исключается из доказанных campaign CPA/ROAS/CAC.
 - Канонический финансовый факт строится не по всем event rows, а по первому `operator_verified order_paid_v2` на grain `order_id + payment_id`.
+- Для доказанной денежной revenue используется `amount_received` только при `amount_quality IN ('exact','partial')`.
+- `amount_quality IN ('unknown','base_currency')` показывается отдельно и не входит в proven revenue/ROAS.

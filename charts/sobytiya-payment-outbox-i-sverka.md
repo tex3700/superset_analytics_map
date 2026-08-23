@@ -44,5 +44,6 @@ Grain после агрегации в чарте:
 ## Особенности интерпретации
 
 - Не использовать сумму `amount` из этого chart как финансовую выручку: одна оплата может иметь несколько event rows.
+- `amount_received` и `amount_quality` нужны для диагностики нового amount contract; доказанная received revenue появляется только при `amount_quality IN ('exact','partial')`.
 - Денежные суммы нужно смотреть в разрезе `currency`; RUB/KZT/BYN нельзя складывать в один total без FX-курса.
 - Для финансового факта использовать [Канонические оплаты payment v2](./kanonicheskie-oplaty-payment-v2.md).

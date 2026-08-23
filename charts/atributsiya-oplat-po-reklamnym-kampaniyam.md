@@ -44,6 +44,10 @@ Grain после агрегации в чарте:
 ## Особенности интерпретации
 
 - В доказанные campaign KPI входит только `campaign_attribution_quality = exact_campaign_id_yclid`.
+- Для доказанной денежной revenue использовать `proven_campaign_verified_received_amount`, а не `proven_campaign_gross_paid_amount`.
+- Для будущего CPA/ROAS использовать `roas_eligible_verified_received_amount`, чтобы исключить CampaignId без spend.
+- `amount_quality IN ('unknown','base_currency')` показывать отдельно через unverified amount buckets.
+- CampaignId `114341332` не использовать для CPA/ROAS без подключения owning Direct account/spend.
 - Денежные суммы нужно смотреть в разрезе `currency`; RUB/KZT/BYN нельзя складывать в один total без FX-курса.
 - `untrusted_client_id` сохраняется в общем финансовом факте, но не распределяется по кампаниям.
 - `utm_fallback` и `unattributed` показываются отдельно и не считаются доказанной campaign attribution.

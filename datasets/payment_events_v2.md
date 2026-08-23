@@ -28,7 +28,7 @@ used_by_charts:
 1 строка = 1 event_id
 ```
 
-Dataset нужен для проверки доставки `order_paid`, `order_paid_v2`, `purchase_paid`, reconciliation-статусов и `attribution_trust`.
+Dataset нужен для проверки доставки `order_paid`, `order_paid_v2`, `purchase_paid`, reconciliation-статусов, `attribution_trust` и нового amount contract (`amount_received`, `amount_quality`).
 
 ## Что отображает
 
@@ -44,7 +44,7 @@ Dataset показывает все payment measurement events как событ
 
 ## Важное ограничение
 
-Этот dataset нельзя использовать для финансовой суммы продаж напрямую: одна оплата может иметь несколько event rows. Для gross paid использовать [order_payments_v2](./order_payments_v2.md).
+Этот dataset нельзя использовать для финансовой суммы продаж напрямую: одна оплата может иметь несколько event rows. Для канонического финансового факта использовать [order_payments_v2](./order_payments_v2.md).
 
 ## Поля и русские labels
 
@@ -56,7 +56,11 @@ Dataset показывает все payment measurement events как событ
 | `payment_id` | ID платежа | `outbox.payment_id` | ID платежа / surrogate `operator_verified:<order_id>` |
 | `paid_at` | Время оплаты | `outbox.paid_at` | Время подтверждения оплаты |
 | `paid_date` | Дата оплаты | `DATE(outbox.paid_at)` | Дата подтверждения оплаты |
-| `amount` | Сумма события | `outbox.amount` | Сумма конкретного event row |
+| `amount` | Сумма события | `outbox.amount` | Сумма конкретного event row; legacy-поле, не всегда фактически полученная сумма |
+| `order_amount` | Сумма заказа | `outbox.amount` | Сумма заказа/события по backend contract |
+| `amount_received` | Полученная сумма | `outbox.amount_received` | Фактически полученная сумма, если backend смог ее подтвердить |
+| `amount_quality` | Качество суммы | `outbox.amount_quality` | `exact`, `partial`, `unknown`, `base_currency` |
+| `verified_received_amount` | Подтвержденная полученная сумма | `amount_received`, только если `amount_quality IN ('exact','partial')` | Денежное поле для доказанной revenue; для `unknown/base_currency` не заполняется |
 | `currency` | Валюта | `outbox.currency` | Валюта суммы события |
 | `client_id` | ClientID Метрики | `outbox.client_id` | ClientID, сохраненный backend |
 | `yclid` | YCLID | `outbox.yclid` | Click ID Яндекс.Директа |
@@ -107,12 +111,14 @@ SELECT
   attribution_trust,
   event_name,
   currency,
+  amount_quality,
   COUNT(*) AS event_rows,
   COUNT(DISTINCT order_id) AS orders,
-  ROUND(SUM(amount), 2) AS amount_sum
+  ROUND(SUM(order_amount), 2) AS order_amount_sum,
+  ROUND(SUM(COALESCE(verified_received_amount, 0)), 2) AS verified_received_amount_sum
 FROM adb.payment_events_v2
-GROUP BY attribution_trust, event_name, currency
-ORDER BY attribution_trust, event_name, currency;
+GROUP BY attribution_trust, event_name, currency, amount_quality
+ORDER BY attribution_trust, event_name, currency, amount_quality;
 ```
 
 Примечание: денежные суммы группируются по `currency`, потому что разные валюты нельзя складывать в один total без FX-курса.
