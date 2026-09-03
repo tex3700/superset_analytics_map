@@ -74,6 +74,23 @@ Schedule Trigger
 | `payment_postfix_sent_missing_client_id` | Post-fix sent trusted events с пустым `client_id` |
 | `payment_postfix_new_client_id_reuse_clusters` | Post-fix новые reuse-кластеры ClientID |
 
+## Refund/net v1 checks
+
+После подключения refund/cancel v1 процедура пишет проверки по группе `refund_net_v1`:
+
+| check_name | Смысл |
+|---|---|
+| `refund_event_rows` | Все refund/cancel rows и distinct business keys |
+| `refund_duplicate_business_keys` | Дубли `event_name + order_id + payment_id + refund_id` |
+| `refund_accepted_events` | Accepted refund events, входящие в net formula |
+| `refund_orphan_refunds` | Refund без исходной оплаты или backend orphan flag |
+| `refund_currency_mismatch` | Несовпадение валюты refund и исходной оплаты |
+| `refund_amount_exceeds_gross` | Refund больше verified gross received |
+| `refund_against_unverified_gross` | Accepted refund по оплате без verified gross received |
+| `refund_negative_net_payments` | Оплаты с отрицательным net; `metric_text` показывает, сколько строк не объяснены неподтвержденным gross |
+| `refund_cancelled_after_paid_without_refund` | Paid payment с cancel event без accepted refund; info |
+| `refund_net_<currency>` | Gross/refund/net отдельно по валюте |
+
 ## Используется
 
 - Superset physical dataset: [analytics_data_quality_daily](../datasets/analytics_data_quality_daily.md), id `32`

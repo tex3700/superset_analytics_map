@@ -9,6 +9,9 @@
 | [payment_events_v2](./payment_events_v2.md) | `34` | Payment-v2 event-level diagnostics |
 | [order_payments_v2](./order_payments_v2.md) | `35` | Канонический gross paid факт на grain `order_id + payment_id` |
 | [payment_campaign_attribution_v2](./payment_campaign_attribution_v2.md) | `36` | Payment-level campaign attribution с `campaign_attribution_quality` |
+| [payment_refund_events_v1](./payment_refund_events_v1.md) | `TODO` | Refund/cancel event-level dataset на grain `order_id + payment_id + refund_id` |
+| [order_payment_net_v1](./order_payment_net_v1.md) | `TODO` | Payment-level gross/refund/net dataset на grain `order_id + payment_id` |
+| [payment_campaign_net_attribution_v1](./payment_campaign_net_attribution_v1.md) | `TODO` | Campaign net attribution с наследованием bucket исходной оплаты |
 
 В этой папке описываем датасеты Superset.
 

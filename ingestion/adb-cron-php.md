@@ -12,6 +12,7 @@ writes_to:
   - adb.orders
   - adb.orders_utm
   - adb.mid_analytics_payment_event_outbox
+  - adb.mid_analytics_refund_event
   - adb.mid_analytics_payment_reconciliation
   - adb.orders_totals
   - adb.order_products
@@ -66,6 +67,7 @@ PHP cron script обновляет часть таблиц ADB из внутре
 move_orders
 move_orders_utm
 move_mid_payment_event_outbox
+move_mid_refund_event
 move_mid_payment_reconciliation
 move_orders_totals
 move_order_products
@@ -208,6 +210,26 @@ TRUNCATE -> batch INSERT
 - контроль read-back и доставки payment-событий;
 - флаги `purchase_seen`, `goal_readback_ok`, `classification`, `reconciled_status`;
 - сверка суммы/валюты с outbox на уровне payment-v2 datasets.
+
+### [adb.mid_analytics_refund_event](../tables/mid_analytics_refund_event.md)
+
+Функция: `move_mid_refund_event`
+
+Режим обновления:
+
+```text
+TRUNCATE -> batch INSERT
+```
+
+Источник:
+
+- MID table `analytics_refund_event`
+
+Назначение:
+
+- перенос `order_refund_v1` и `order_cancelled_v1`;
+- сохранение `order_id`, `payment_id`, `refund_id`, `refunded_at`, `refund_amount`, `currency`;
+- основа для `payment_refund_events_v1`, `order_payment_net_v1`, `payment_campaign_net_attribution_v1`.
 
 ## Особенности
 

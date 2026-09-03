@@ -38,7 +38,7 @@ CALL adb.refresh_analytics_data_quality_daily();
 | `check_group` | Группа проверки |
 | `metric_value` | Числовое значение |
 | `metric_text` | Текстовое значение |
-| `status` | `ok`, `warning`, `info` |
+| `status` | `ok`, `warning`, `info`, `error` |
 | `comment` | Комментарий |
 | `created_at` | Время вставки/обновления |
 
@@ -66,3 +66,18 @@ CALL adb.refresh_analytics_data_quality_daily();
 | `payment_currency_mismatch_orders` | Расхождение валюты между `order_paid_v2` и sibling events |
 | `payment_postfix_sent_missing_client_id` | Post-fix sent trusted events с пустым `client_id` |
 | `payment_postfix_new_client_id_reuse_clusters` | Post-fix новые reuse-кластеры ClientID |
+
+## Refund/net v1 checks
+
+| Check name | Смысл |
+|---|---|
+| `refund_event_rows` | Все refund/cancel rows и distinct business keys |
+| `refund_duplicate_business_keys` | Дубли refund/cancel business key |
+| `refund_accepted_events` | Accepted refund events, входящие в net formula |
+| `refund_orphan_refunds` | Refund без исходной оплаты или backend orphan flag |
+| `refund_currency_mismatch` | Несовпадение валюты refund и оплаты |
+| `refund_amount_exceeds_gross` | Refund больше verified gross received |
+| `refund_against_unverified_gross` | Accepted refund по оплате без verified gross received |
+| `refund_negative_net_payments` | Отрицательный net после accepted refunds; `metric_text` показывает, сколько строк не объяснены неподтвержденным gross |
+| `refund_cancelled_after_paid_without_refund` | Paid cancel без accepted refund; информационный сигнал |
+| `refund_net_<currency>` | Gross/refund/net отдельно по валюте |

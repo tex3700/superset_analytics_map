@@ -125,6 +125,13 @@ MID payment measurement v2
   -> Charts: События payment outbox и сверка (id=120), Канонические оплаты payment v2 (id=121), Атрибуция оплат по рекламным кампаниям (id=122)
   -> Purpose: payment fact by first operator_verified order_paid_v2; order_amount and verified_received_amount are separated; proven campaign revenue uses amount_received only for exact/partial amount_quality; untrusted/unknown/base_currency retained as separate buckets
 
+MID refund/cancel v1
+  -> PHP cron: adb.php, daily 06:30
+  -> ADB.adb.mid_analytics_refund_event
+  -> ADB views: payment_refund_events_v1 + order_payment_net_v1 + payment_campaign_net_attribution_v1
+  -> Superset datasets: payment_refund_events_v1 (id=TODO), order_payment_net_v1 (id=TODO), payment_campaign_net_attribution_v1 (id=TODO)
+  -> Purpose: accepted order_refund_v1 decreases verified gross received revenue; order_cancelled_v1 is non-financial; refund inherits source payment attribution bucket; unmatched refunds remain unattributed
+
 MID payment measurement v2 + ADB quality checks
   -> PHP cron: adb.php + n8n workflow: Analytics data quality
   -> ADB.adb.mid_analytics_payment_event_outbox + ADB.adb.mid_analytics_payment_reconciliation
