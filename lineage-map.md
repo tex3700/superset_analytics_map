@@ -129,7 +129,7 @@ MID refund/cancel v1
   -> PHP cron: adb.php, daily 06:30
   -> ADB.adb.mid_analytics_refund_event
   -> ADB views: payment_refund_events_v1 + order_payment_net_v1 + payment_campaign_net_attribution_v1
-  -> Superset datasets: payment_refund_events_v1 (id=TODO), order_payment_net_v1 (id=TODO), payment_campaign_net_attribution_v1 (id=TODO)
+  -> Superset datasets: payment_refund_events_v1 (id=37), order_payment_net_v1 (id=39), payment_campaign_net_attribution_v1 (id=38)
   -> Purpose: accepted order_refund_v1 decreases verified gross received revenue; order_cancelled_v1 is non-financial; refund inherits source payment attribution bucket; unmatched refunds remain unattributed
 
 MID payment measurement v2 + ADB quality checks

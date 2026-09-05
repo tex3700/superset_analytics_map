@@ -3,7 +3,7 @@
 ---
 type: dataset
 name: payment_refund_events_v1
-superset_dataset_id: TODO
+superset_dataset_id: 37
 superset_type: physical_view
 database: ADB
 schema: adb
@@ -17,6 +17,8 @@ used_by_charts: []
 ## Краткое описание
 
 Event-level dataset для refund/cancel v1. Это самый подробный диагностический слой: он показывает каждое событие возврата или отмены, поля source table `analytics_refund_event`, найденную исходную оплату и quality-флаги.
+
+Production acceptance: refund/net v1 принят заказчиком по независимой проверке production Superset MCP от 2026-09-04.
 
 Grain:
 

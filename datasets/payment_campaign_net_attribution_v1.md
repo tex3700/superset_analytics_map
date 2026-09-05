@@ -3,7 +3,7 @@
 ---
 type: dataset
 name: payment_campaign_net_attribution_v1
-superset_dataset_id: TODO
+superset_dataset_id: 38
 superset_type: physical_view
 database: ADB
 schema: adb
@@ -16,6 +16,8 @@ used_by_charts: []
 ## Краткое описание
 
 Campaign-level net attribution dataset для payment-v2 + refund/cancel v1. Это слой для проверки, как confirmed refunds уменьшают net внутри того же attribution bucket, что и исходная оплата.
+
+Production acceptance: refund/net v1 принят заказчиком по независимой проверке production Superset MCP от 2026-09-04.
 
 Grain:
 

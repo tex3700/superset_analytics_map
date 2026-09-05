@@ -3,7 +3,7 @@
 ---
 type: dataset
 name: order_payment_net_v1
-superset_dataset_id: TODO
+superset_dataset_id: 39
 superset_type: physical_view
 database: ADB
 schema: adb
@@ -17,6 +17,8 @@ used_by_charts: []
 ## Краткое описание
 
 Payment-level net dataset для payment-v2 + refund/cancel v1. Это основная финансовая витрина: одна строка показывает оплату, ее verified gross received amount, подтвержденные возвраты и итоговый net.
+
+Production acceptance: refund/net v1 принят заказчиком по независимой проверке production Superset MCP от 2026-09-04. Проверено: `686` строк = `686` уникальных `order_id + payment_id`.
 
 Grain:
 
